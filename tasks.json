@@ -28,5 +28,13 @@
         "device_class": "random",
         "device_name": "ecu",
         "project": "C:\\Users\\Jordan\\Documents\\ShareX\\Screenshots"
+    },
+    {
+        "command": "make",
+        "device_class": "asdf",
+        "device_name": "ECU69",
+        "program": "/Users/alex/Desktop/ted_can/app/index.css",
+        "project": "/Users/alex/MPLABXProjects",
+        "scenario": "/Users/alex/Desktop/ted_can/data_standard.txt"
     }
 ]
