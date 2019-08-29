@@ -84,6 +84,7 @@ ipcMain.on("load", (event) => {
     fs.readFile(filepath[0], (err, data) => {
       if(err) {
         console.error(err);
+        event.sender.send("load-canceled");
         return;
       }
 

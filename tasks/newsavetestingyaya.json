@@ -1,0 +1,17 @@
+[
+    {
+        "command": "all",
+        "device_class": "asdf",
+        "project": ""
+    },
+    {
+        "command": "flash",
+        "device_class": "flasshhhyy",
+        "project": ""
+    },
+    {
+        "command": "all",
+        "device_class": "",
+        "project": ""
+    }
+]

@@ -161,16 +161,19 @@ function updateTask() {
 
 // The new button creates a new task and opens it up in the edit view.
 function newTask() {
-  // Add a new task with these default values.
-
-  console.log(tasks);
-
-  let task = {
+  let task = { // add a new task with these default values.
     command: "all",
     device_class: "",
     project: ""
   };
-  tasks.push(task);
+
+  if(tasks === undefined) { // tasks is "undefined" if there are no tasks loaded
+    tasks = []; // create an empty array for "tasks"
+  }
+
+  if(tasks.push(task)) { // if new default task is pushed/added successfully
+    setDisplay("no-tasks-loaded", false);
+  };
 
   // Refresh the task list to show the new task.
   refreshTasks();
