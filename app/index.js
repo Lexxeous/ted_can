@@ -26,6 +26,7 @@ function refreshTasks() {
   // Remove the current task nodes, if any exist.
   let taskNodes = document.getElementsByClassName("task");
   let totalTaskNodes = taskNodes.length;
+
   for(var i = 0; i < totalTaskNodes; i++) taskNodes[0].remove();
 
   // Create nodes for each task in the list.
@@ -39,24 +40,24 @@ function refreshTasks() {
     para.innerText = generateCommand(e);    
     node.appendChild(para);
 
-    var buttonDiv = document.createElement("div");
-    buttonDiv.className = "buttons";
+    var taskActionsDiv = document.createElement("div");
+    taskActionsDiv.className = "task-actions";
     
     // Edit button.
     var editButton = document.createElement("img");
     editButton.className = "edit-task";
     editButton.src = "../.images/edit_task.png";
     editButton.onclick = () => editTask(i);
-    buttonDiv.appendChild(editButton);
+    taskActionsDiv.appendChild(editButton);
 
     // Delete button.
     var deleteButton = document.createElement("img");
     deleteButton.className = "delete-task";
     deleteButton.src = "../.images/delete_task.png"
     deleteButton.onclick = () => confirmDelete(i);
-    buttonDiv.appendChild(deleteButton);
+    taskActionsDiv.appendChild(deleteButton);
 
-    node.appendChild(buttonDiv);
+    node.appendChild(taskActionsDiv);
     
     document.getElementById("table-view").appendChild(node);
   });
@@ -200,6 +201,11 @@ function deleteTask(i) {
   setDisplay("confirm-dialog", false);
   // Refresh the tasks list.
   refreshTasks();
+  if(tasks.length <= 0) {
+    console.warn("No tasks available to list.");
+    setDisplay("no-tasks-loaded", true);
+    return;
+  }
 }
 
 // Tell Electron to save the task list to a file.
