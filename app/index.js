@@ -42,6 +42,13 @@ function refreshTasks() {
 
     var taskActionsDiv = document.createElement("div");
     taskActionsDiv.className = "task-actions";
+
+    // Run button.
+    var runButton = document.createElement("img");
+    runButton.className = "run-task";
+    runButton.src = "../.images/run_task.png";
+    runButton.onclick = () => confirmRunTask(i);
+    taskActionsDiv.appendChild(runButton);
     
     // Edit button.
     var editButton = document.createElement("img");
@@ -167,33 +174,32 @@ function newTask() {
     device_class: "",
     project: ""
   };
-
   if(tasks === undefined) { // tasks is "undefined" if there are no tasks loaded
     tasks = []; // create an empty array for "tasks"
   }
-
   if(tasks.push(task)) { // if new default task is pushed/added successfully
     setDisplay("no-tasks-loaded", false);
   };
-
-  // Refresh the task list to show the new task.
-  refreshTasks();
+  refreshTasks(); // refresh the task list to show the new task.
 }
 
 
-// Cancel the dialog box by closing it.
+// Cancel a dialog box by closing it.
 function cancelDialog() {
   setDisplay("confirm-dialog", false);
 }
 function cancelClearTasksDialog() {
-  setDisplay("confirm-clear-tasks-dialog", false); // hide the dialog box.
+  setDisplay("confirm-clear-tasks-dialog", false);
+}
+function cancelRunTaskDialog() {
+  setDisplay("confirm-run-task-dialog", false);
 }
 
 
 function confirmDelete(i) { // show a confirmation box before deleting a task.
   let deleteButton = document.getElementById("dialog-delete-button"); // get the delete button by id
-  deleteButton.onclick = () => deleteTask(i);
   setDisplay("confirm-dialog", true); // show the dialog box.
+  deleteButton.onclick = () => deleteTask(i);
 }
 function deleteTask(i) { // delete a task from the list.
   tasks.splice(i, 1); // delete the appropriate task at index i
@@ -208,9 +214,9 @@ function deleteTask(i) { // delete a task from the list.
 
 
 function confirmClearTasks() { // show a confirmation box before clearing all the tasks
-  let clearButton = document.getElementById("dialog-clear-button"); // get the clear button by id
-  clearButton.onclick = () => clearTasks();
+  let clearButton = document.getElementById("dialog-clear-tasks-button"); // get the clear button by id
   setDisplay("confirm-clear-tasks-dialog", true); // show the dialog box
+  clearButton.onclick = () => clearTasks();
 }
 function clearTasks() { // clear all the tasks
   tasks.splice(0, tasks.length);
@@ -236,7 +242,20 @@ function loadTasks() {
   // Ask the main process to load the tasks from a file.
   ipcRenderer.send("load");
 }
-// loadTasks(); // Go ahead and load up the tasks list.
+
+
+
+function confirmRunTask(i) {
+  let runButton = document.getElementById("dialog-run-task-button");
+  setDisplay("confirm-run-task-dialog", true); // show the dialog box
+  runButton.onclick = () => runTask(i);
+}
+function runTask(i) {
+  let taskStr = generateCommand(tasks[i]);
+  setDisplay("confirm-run-task-dialog", false);
+  console.log(taskStr);
+}
+
 
 
 Date.prototype.mmddyyyy = function() {

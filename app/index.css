@@ -102,7 +102,6 @@ img#load-tasks:hover {
 }
 
 
-
 img#new-task {
   width: 22px;
   /*height: 20px;*/
@@ -112,7 +111,6 @@ img#new-task:hover {
   bottom: 2px;
   cursor: pointer;
 }
-
 
 
 button#new-task {
@@ -127,6 +125,25 @@ button#new-task:hover {
 }
 
 
+button.update-task {
+  background-color: var(--blue-desat);
+}
+button.update-task:hover {
+  background-color: var(--blue-sat);
+}
+
+
+img.run-task {
+  width: 25px;
+  height: 25px;
+}
+img.run-task:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
+}
+
+
 img.edit-task {
   width: 25px;
   height: 25px;
@@ -135,14 +152,6 @@ img.edit-task:hover {
   position: relative;
   bottom: 2px;
   cursor: pointer;
-}
-
-
-button.update-task {
-  background-color: var(--blue-desat);
-}
-button.update-task:hover {
-  background-color: var(--blue-sat);
 }
 
 
@@ -169,10 +178,26 @@ img#clear-tasks:hover {
 
 
 button#dialog-delete-button {
-  background: var(--red-desat);
+  background-color: var(--red-desat);
 }
 button#dialog-delete-button:hover {
-  background: var(--red-sat);
+  background-color: var(--red-sat);
+}
+
+
+button#dialog-clear-tasks-button {
+  background-color: var(--red-desat);
+}
+button#dialog-clear-tasks-button:hover {
+  background-color: var(--red-sat);
+}
+
+
+button #dialog-run-task-button {
+  background-color: var(--green-desat);
+}
+button #dialog-run-task-button:hover {
+  background-color: var(--green-sat);
 }
 
 
@@ -299,4 +324,7 @@ span#build-number {
 
 .danger {
   color: var(--red-sat);
+}
+.affirm {
+  color: var(--green-sat);
 }
