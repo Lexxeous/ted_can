@@ -210,7 +210,7 @@ function loadTasks() {
   // Ask the main process to load the tasks from a file.
   ipcRenderer.send("load");
 }
-loadTasks(); // Go ahead and load up the tasks list.
+// loadTasks(); // Go ahead and load up the tasks list.
 
 
 Date.prototype.mmddyyyy = function() {
@@ -241,4 +241,5 @@ ipcRenderer.on("load-done", (_, data) => {
   refreshTasks();
   // Hide the loading dialog box.
   setDisplay("loading-dialog", false);
+  setDisplay("no-tasks-loaded", false);
 });

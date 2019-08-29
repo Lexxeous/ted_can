@@ -31,6 +31,7 @@ body {
 
 h1.title {
   display: inline-block;
+  padding-right: 8px;
 }
 
 /*------------------------------------------------------------------------------------------------------------*/
@@ -39,11 +40,14 @@ h1.title {
 #io-buttons {
   display: inline-block;
 }
+.io-button {
+  padding-right: 8px;
+}
+
 
 .buttons {
   flex-shrink: 0;
 }
-
 button {
   background: none;
   border: 1px solid #555;
@@ -55,6 +59,7 @@ button:hover {
   background: #5551;
   cursor: pointer;
 }
+
 
 button.close { /* close the edit task menu */
   background: none;
@@ -75,6 +80,7 @@ button.close:hover {
   color: #333;
   background: rgba(0,0,0,0.05);
 }
+
 
 img#save-tasks {
   width: 20px;
@@ -122,12 +128,14 @@ button#new-task:hover {
   background-color: var(--green-sat);
 }
 
+
 button.edit-task {
   background-color: var(--blue-desat);
 }
 button.edit-task:hover {
   background-color: var(--blue-sat);
 }
+
 
 button.update-task {
   background-color: var(--blue-desat);
@@ -136,6 +144,7 @@ button.update-task:hover {
   background-color: var(--blue-sat);
 }
 
+
 button.delete-task {
   background-color: var(--red-desat);
 }
@@ -143,12 +152,14 @@ button.delete-task:hover {
   background-color: var(--red-sat);
 }
 
+
 button#dialog-delete-button {
   background: var(--red-desat);
 }
 button#dialog-delete-button:hover {
   background: var(--red-sat);
 }
+
 
 /*------------------------------------------------------------------------------------------------------------*/
 /* Divs and Spans */
@@ -166,6 +177,10 @@ div.row:nth-child(even) {
 
 div.row > p {
   margin: 0 8px;
+}
+
+div#no-tasks-loaded {
+  margin: 8px;
 }
 
 span#version-number {

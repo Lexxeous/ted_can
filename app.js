@@ -1,6 +1,6 @@
 // This is the server file
 
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const {app, BrowserWindow, ipcMain, dialog} = require("electron");
 const fs = require("fs");
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -61,12 +61,18 @@ ipcMain.on("save", (event, tasks) => {
 });
 
 ipcMain.on("load", (event) => {
-  fs.readFile("./tasks.json", (err, data) => {
-    if(err) {
-      console.error(err);
-      return;
+  dialog.showOpenDialog({properties: ['openFile', 'openDirectory'], defaultPath: "./tasks"}, (filepath) => {
+    if(filepath === undefined){
+        console.error("No file selected.");
+        return;
     }
+    fs.readFile(filepath[0], (err, data) => {
+      if(err) {
+        console.error(err);
+        return;
+      }
 
-    event.sender.send("load-done", JSON.parse(data));
+      event.sender.send("load-done", JSON.parse(data));
+    });
   });
 });
