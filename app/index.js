@@ -162,6 +162,9 @@ function updateTask() {
 // The new button creates a new task and opens it up in the edit view.
 function newTask() {
   // Add a new task with these default values.
+
+  console.log(tasks);
+
   let task = {
     command: "all",
     device_class: "",
@@ -230,8 +233,12 @@ function getBuildNumber() {
 
 // Hide the loading dialog box after file is finished saving.
 ipcRenderer.on("save-done", (_) => {
-  setDisplay("loading-dialog");
+  setDisplay("loading-dialog", false);
 });
+ipcRenderer.on("save-canceled", (_) => {
+  setDisplay("loading-dialog", false);
+});
+
 
 // Set tasks after the load is done then hide the dialog box.
 ipcRenderer.on("load-done", (_, data) => {
@@ -242,4 +249,7 @@ ipcRenderer.on("load-done", (_, data) => {
   // Hide the loading dialog box.
   setDisplay("loading-dialog", false);
   setDisplay("no-tasks-loaded", false);
+});
+ipcRenderer.on("load-canceled", (_) => {
+  setDisplay("loading-dialog", false);
 });

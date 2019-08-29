@@ -22,26 +22,5 @@
         "program": "33EV_main_v11.c",
         "project": "C:\\Users\\jorda\\MPLABXProjects\\DM330018_Starter_Kit_Demo.X",
         "scenario": "C:\\Users\\jorda\\Google Drive\\School\\Grad School\\ted_app\\data_standard.txt"
-    },
-    {
-        "command": "all",
-        "device_class": "random",
-        "device_name": "ecu",
-        "project": "C:\\Users\\Jordan\\Documents\\ShareX\\Screenshots"
-    },
-    {
-        "command": "all",
-        "device_class": "",
-        "project": ""
-    },
-    {
-        "command": "all",
-        "device_class": "",
-        "project": ""
-    },
-    {
-        "command": "all",
-        "device_class": "",
-        "project": ""
     }
 ]

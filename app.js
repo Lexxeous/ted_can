@@ -48,8 +48,18 @@ app.on("activate", () => {
 
 // Save a task list to the disk.
 ipcMain.on("save", (event, tasks) => {
-  dialog.showSaveDialog({defaultPath: "./tasks.json"}, (filename) => {
-    fs.writeFile("./tasks.json", JSON.stringify(tasks, null, 4), (err) => {
+  dialog.showSaveDialog({defaultPath: "./tasks"}, (filepath) => {
+    if(filepath === undefined) {
+      console.warn("No save file selected.");
+      event.sender.send("save-canceled");
+      return;
+    }
+    if(tasks == null || tasks == "") {
+      console.warn("You cannot save an empty tasks file.");
+      event.sender.send("save-canceled");
+      return;
+    }
+    fs.writeFile(filepath, JSON.stringify(tasks, null, 4), (err) => {
       if(err) {
         console.error(err);
         return;
@@ -62,9 +72,14 @@ ipcMain.on("save", (event, tasks) => {
 
 ipcMain.on("load", (event) => {
   dialog.showOpenDialog({properties: ['openFile', 'openDirectory'], defaultPath: "./tasks"}, (filepath) => {
-    if(filepath === undefined){
-        console.error("No file selected.");
-        return;
+    if(filepath === undefined) {
+      console.warn("No load file selected.");
+      event.sender.send("load-canceled");
+      return;
+    }
+    if(filepath == null || filepath == "") {
+      console.warn("Task file is empty.");
+      return;
     }
     fs.readFile(filepath[0], (err, data) => {
       if(err) {
