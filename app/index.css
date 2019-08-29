@@ -1,0 +1,263 @@
+/*------------------------------------------------------------------------------------------------------------*/
+/* Import Styling */
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+/*------------------------------------------------------------------------------------------------------------*/
+/* Main Setup */
+
+:root{
+  --red-desat: #c54f37; /* desaturated red for destructive actions */
+  --green-desat: #2ec864; /* desaturated green for creative actions */
+  --blue-desat: #7979c6; /* desaturated blue for editive actions */
+
+  --red-sat: #f63006; /* saturated red for hovering over destructive actions */
+  --green-sat: #12e45b; /* saturated green for hovering over creative actions */
+  --blue-sat: #6363dc; /* saturated blue for hovering over editive */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.view {
+  margin: 8px;
+}
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+h1.title {
+  display: inline-block;
+}
+
+/*------------------------------------------------------------------------------------------------------------*/
+/* Buttons */
+
+#io-buttons {
+  display: inline-block;
+}
+
+.buttons {
+  flex-shrink: 0;
+}
+
+button {
+  background: none;
+  border: 1px solid #555;
+  border-radius: 4px;
+  height: 26px;
+  margin: 0 2px;
+}
+button:hover {
+  background: #5551;
+  cursor: pointer;
+}
+
+button.close { /* close the edit task menu */
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 150%;
+  line-height: 100%;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 100%;
+  position: absolute;
+  margin: 10px;
+  top: 0;
+  right: 0;
+}
+button.close:hover {
+  color: #333;
+  background: rgba(0,0,0,0.05);
+}
+
+img#save-tasks {
+  width: 20px;
+  height: 20px;
+}
+img#save-tasks:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
+}
+
+
+img#load-tasks {
+  width: 23px;
+  /*height: 20px;*/
+}
+img#load-tasks:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
+}
+
+
+
+img#new-task {
+  width: 22px;
+  /*height: 20px;*/
+}
+img#new-task:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
+}
+
+
+
+button#new-task {
+  /*float: right;*/
+  margin: 1.2em 4px;
+  background-color: var(--green-desat);
+}
+button#new-task:hover {
+  /*float: right;*/
+  margin: 1.2em 4px;
+  background-color: var(--green-sat);
+}
+
+button.edit-task {
+  background-color: var(--blue-desat);
+}
+button.edit-task:hover {
+  background-color: var(--blue-sat);
+}
+
+button.update-task {
+  background-color: var(--blue-desat);
+}
+button.update-task:hover {
+  background-color: var(--blue-sat);
+}
+
+button.delete-task {
+  background-color: var(--red-desat);
+}
+button.delete-task:hover {
+  background-color: var(--red-sat);
+}
+
+button#dialog-delete-button {
+  background: var(--red-desat);
+}
+button#dialog-delete-button:hover {
+  background: var(--red-sat);
+}
+
+/*------------------------------------------------------------------------------------------------------------*/
+/* Divs and Spans */
+
+div.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px;
+}
+
+div.row:nth-child(even) {
+  background: #EEE;
+}
+
+div.row > p {
+  margin: 0 8px;
+}
+
+span#version-number {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  font-size: 8pt;
+  font-weight: bold;
+  color: grey;
+  padding: 5px;
+}
+
+span#build-number {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 8pt;
+  font-weight: bold;
+  color: grey;
+  padding: 5px;
+}
+
+/*------------------------------------------------------------------------------------------------------------*/
+
+#task-editor {
+  text-align: center;
+}
+
+#task-form {
+  text-align: left;
+  width: 400px;
+  display: inline-block;
+  padding: 10px;
+  padding-top: 2px;
+  border: 1px solid black;
+  border-radius: 3px;
+}
+
+#task-form > label {
+  display: block;
+  margin-top: 8px;
+}
+
+#task-form > select {
+  margin: 2px 0;
+  width: 400px;
+}
+
+#task-form > input {
+  margin: 2px 0;
+  width: 396px;
+}
+
+.right-side {
+  width: 100%;
+  margin: 5px;
+  text-align: right;
+}
+
+.dialog {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #0004;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-box {
+  display: flex;
+  width: 400px;
+  height: 100px;
+  background: white;
+  padding: 6px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px solid gray;
+  border-radius: 2px;
+}
+
+.dialog-box > span {
+  display: block;
+  text-align: left;
+  margin: 2px;
+}
+
+.danger {
+  color: var(--red-sat);
+}

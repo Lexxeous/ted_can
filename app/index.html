@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>TED CAN</title>
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <link rel="stylesheet" type="text/css" href="loading-wheel.css">
+</head>
+
+<body>
+
+  <!-- Dialog box for confirmations. -->
+  <div id="confirm-dialog" class="dialog" style="display: none">
+    <div id="confirm-dialog-box" class="dialog-box">
+      <span class="danger">
+        Are you sure you want to delete? This action cannot be undone.
+      </span>
+      <div id="confirm-dialog-buttons">
+        <button onclick="cancelDialog()">Cancel</button>
+        <button id="dialog-delete-button">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loading-dialog" class="dialog" style="display: none">
+    <div class="dialog-box">
+      <span>Loading...</span>
+      <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+    </div>
+  </div>
+
+
+  <!-- Main Table View -->
+  <div id="table-view" class="view">
+    <h1 class="title">Tasks</h1>
+    <div id="io-buttons">
+      <img id="save-tasks" src="../pics/save_tasks.png" onclick="saveTasks()">
+      <img id="load-tasks" src="../pics/load_tasks.png" onclick="loadTasks()">
+      <img id="new-task" src="../pics/new_task.png" onclick="newTask()">
+      <!-- <button id="save-tasks" onclick="saveTasks()"><img src="../pics/save_tasks.png"></button> -->
+      <!-- <button id="load-tasks" onclick="loadTasks()">Load</button> -->
+      <!-- <button id="new-task" onclick="newTask()">New (&plus;)</button> -->
+    </div>
+  </div>
+
+
+  <!-- Edit View -->
+  <div id="edit-view" style="display: none" class="view">
+    <h3>Edit</h3>
+    <button class="close close-view">&times;</button>
+    <div id="task-editor">
+      <form id="task-form" action="javascript:void(0);" onsubmit="updateTask()">
+
+        <!-- Task ID -->
+        <input type="hidden" id="task-id">
+
+        <!-- Task Type -->
+        <label for="task-command">Command</label>
+        <select name="task-command" id="task-command">
+          <option value="all">All</option>
+          <option value="make">Make</option>
+          <option value="flash">Flash</option>
+        </select>
+
+        <!-- Device Class -->
+        <label for="task-device-class">Device Class</label>
+        <input type="text" name="task-device-class" id="task-device-class">
+
+        <!-- Project Folder -->
+        <label for="task-project-text">Project Folder</label>
+        <input type="text" name="task-project" id="task-project-text" class="task-file-text" readonly>
+        <button type="button" class="task-edit-file" id="task-project-btn" onclick="showTaskFilePicker('task-project')">Edit</button>
+        <input style="display: none" type="file" name="task-project" id="task-project" class="task-file-picker" webkitdirectory>
+
+        <!-- Scenario File -->
+        <label for="task-scenario-text">Scenario File</label>
+        <input type="text" name="task-scenario" id="task-scenario-text" class="task-file-text" readonly>
+        <button type="button" class="task-edit-file" id="task-scenario-btn" onclick="showTaskFilePicker('task-scenario')">Edit</button>
+        <input style="display: none" type="file" name="task-scenario" id="task-scenario" class="task-file-picker" accept=".txt">
+
+        <!-- Program File -->
+        <label for="task-program-text">Program File</label>
+        <input type="text" name="task-program" id="task-program-text" class="task-file-text" readonly>
+        <button type="button" class="task-edit-file" id="task-program-btn" onclick="showTaskFilePicker('task-program')">Edit</button>
+        <input style="display: none" type="file" name="task-program" id="task-program" class="task-file-picker" accept=".c">
+
+        <!-- Device Name -->
+        <label for="task-device-name">Device Name</label>
+        <input type="text" name="task-device-name" id="task-device-name">
+
+        <!-- Buttons -->
+        <div class="right-side">
+          <button type="button" class="close-view">Cancel</button>
+          <button type="submit" class="update-task">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" src="index.js"></script>
+
+  <br> <!--------------------------------------------------------------------------------------------------->
+
+  <div>
+    <span>
+      A software interface for Testing, Evaluating, and Demonstrating a hardware testbed for the CAN protocol.
+    </span>
+  </div>
+
+  <br> <!--------------------------------------------------------------------------------------------------->
+
+  <div>
+    Acknowledgements center with TTU logo
+  </div>
+
+  <span id="build-number"> Build –
+    <script type="text/javascript">
+      document.write(getBuildNumber());
+    </script>
+  </span>
+
+  <span id="version-number">
+    Version – 2.1.0
+  </span>
+
+</body>
+
+</html>
