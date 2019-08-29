@@ -180,33 +180,46 @@ function newTask() {
   refreshTasks();
 }
 
-// Show a confirmation box before deleting a task.
-function confirmDelete(i) {
-  // Set the function for the delete button to delete the correct row.
-  let deleteButton = document.getElementById("dialog-delete-button");
-  deleteButton.onclick = () => deleteTask(i);
-  // Show the dialog box.
-  setDisplay("confirm-dialog", true);
-}
 
 // Cancel the dialog box by closing it.
 function cancelDialog() {
   setDisplay("confirm-dialog", false);
 }
+function cancelClearTasksDialog() {
+  setDisplay("confirm-clear-tasks-dialog", false); // hide the dialog box.
+}
 
-// Delete a task from the list.
-function deleteTask(i) {
-  tasks.splice(i, 1);
-  // Hide the dialog box.
-  setDisplay("confirm-dialog", false);
-  // Refresh the tasks list.
-  refreshTasks();
+
+function confirmDelete(i) { // show a confirmation box before deleting a task.
+  let deleteButton = document.getElementById("dialog-delete-button"); // get the delete button by id
+  deleteButton.onclick = () => deleteTask(i);
+  setDisplay("confirm-dialog", true); // show the dialog box.
+}
+function deleteTask(i) { // delete a task from the list.
+  tasks.splice(i, 1); // delete the appropriate task at index i
+  setDisplay("confirm-dialog", false); // hide the dialog box.
+  refreshTasks(); // refresh the tasks list.
   if(tasks.length <= 0) {
     console.warn("No tasks available to list.");
     setDisplay("no-tasks-loaded", true);
     return;
   }
 }
+
+
+function confirmClearTasks() { // show a confirmation box before clearing all the tasks
+  let clearButton = document.getElementById("dialog-clear-button"); // get the clear button by id
+  clearButton.onclick = () => clearTasks();
+  setDisplay("confirm-clear-tasks-dialog", true); // show the dialog box
+}
+function clearTasks() { // clear all the tasks
+  tasks.splice(0, tasks.length);
+  setDisplay("confirm-clear-tasks-dialog", false); // hide the dialog box.
+  refreshTasks(); // refresh the tasks list.
+  console.warn("No tasks available to list.");
+  setDisplay("no-tasks-loaded", true);
+}
+
 
 // Tell Electron to save the task list to a file.
 function saveTasks() {
@@ -215,6 +228,7 @@ function saveTasks() {
   // Send the task list to the main process and tell it to save them to a file.
   ipcRenderer.send("save", tasks);
 }
+
 
 function loadTasks() {
   // Show the loading dialog while file is being loaded.

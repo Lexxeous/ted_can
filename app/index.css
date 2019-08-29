@@ -157,6 +157,17 @@ img.delete-task:hover {
 }
 
 
+img#clear-tasks {
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 16px;
+}
+img#clear-tasks:hover {
+  cursor: pointer;
+}
+
+
 button#dialog-delete-button {
   background: var(--red-desat);
 }

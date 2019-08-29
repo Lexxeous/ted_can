@@ -10,11 +10,13 @@
 
 <body>
 
-  <!--------------------------------------- Dialog box for confirmations. --------------------------------------->
+  <!--------------------------------------- Dialog boxes for confirmations. --------------------------------------->
+  
+  <!-- Delete Single Task -->
   <div id="confirm-dialog" class="dialog" style="display: none">
     <div id="confirm-dialog-box" class="dialog-box">
       <span class="danger">
-        Are you sure you want to delete? This action cannot be undone.
+        Are you sure you want to delete this task? This action cannot be undone!
       </span>
       <div id="confirm-dialog-buttons">
         <button onclick="cancelDialog()">Cancel</button>
@@ -23,6 +25,22 @@
     </div>
   </div>
 
+
+  <!-- Clear All Tasks -->
+  <div id="confirm-clear-tasks-dialog" class="dialog" style="display: none">
+    <div id="confirm-clear-tasks-dialog-box" class="dialog-box">
+      <span class="danger">
+        Are you sure you want to clear ALL the tasks? This action cannot be undone!
+      </span>
+      <div id="confirm-clear-tasks-dialog-buttons">
+        <button onclick="cancelClearTasksDialog()">Cancel</button>
+        <button id="dialog-clear-button">Clear</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Loading Wheel -->
   <div id="loading-dialog" class="dialog" style="display: none">
     <div class="dialog-box">
       <span>Loading...</span>
@@ -38,6 +56,7 @@
       <img id="save-tasks" src="../.images/save_tasks.png" class="io-button" onclick="saveTasks()">
       <img id="load-tasks" src="../.images/load_tasks.png" class="io-button" onclick="loadTasks()">
       <img id="new-task" src="../.images/new_task.png" class="io-button" onclick="newTask()">
+      <img id="clear-tasks" src="../.images/clear_tasks.png" class="io-button" onclick="confirmClearTasks()">
       <!-- <button id="save-tasks" onclick="saveTasks()"><img src="../.images/save_tasks.png"></button> -->
       <!-- <button id="load-tasks" onclick="loadTasks()">Load</button> -->
       <!-- <button id="new-task" onclick="newTask()">New (&plus;)</button> -->
