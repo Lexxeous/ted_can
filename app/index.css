@@ -35,7 +35,7 @@ h1.title {
 }
 
 /*------------------------------------------------------------------------------------------------------------*/
-/* Buttons */
+/* Buttons and Images Acting as Buttons*/
 
 #io-buttons {
   display: inline-block;
@@ -129,11 +129,14 @@ button#new-task:hover {
 }
 
 
-button.edit-task {
-  background-color: var(--blue-desat);
+img.edit-task {
+  width: 25px;
+  height: 25px;
 }
-button.edit-task:hover {
-  background-color: var(--blue-sat);
+img.edit-task:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
 }
 
 

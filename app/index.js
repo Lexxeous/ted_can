@@ -43,9 +43,9 @@ function refreshTasks() {
     buttonDiv.className = "buttons";
     
     // Edit button.
-    var editButton = document.createElement("button");
+    var editButton = document.createElement("img");
     editButton.className = "edit-task";
-    editButton.innerText = "Edit";
+    editButton.src = "../.images/edit_task.png";
     editButton.onclick = () => editTask(i);
     buttonDiv.appendChild(editButton);
 
