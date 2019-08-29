@@ -50,9 +50,9 @@ function refreshTasks() {
     buttonDiv.appendChild(editButton);
 
     // Delete button.
-    var deleteButton = document.createElement("button");
+    var deleteButton = document.createElement("img");
     deleteButton.className = "delete-task";
-    deleteButton.innerHTML = "&times;";
+    deleteButton.src = "../.images/delete_task.png"
     deleteButton.onclick = () => confirmDelete(i);
     buttonDiv.appendChild(deleteButton);
 
