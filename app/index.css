@@ -114,23 +114,36 @@ img#new-task:hover {
 }
 
 
-button#new-task {
-  /*float: right;*/
-  margin: 1.2em 4px;
-  background-color: var(--green-desat);
+img#run-tasks {
+  width: 25px;
+  height: 25px;
 }
-button#new-task:hover {
-  /*float: right;*/
-  margin: 1.2em 4px;
-  background-color: var(--green-sat);
+img#run-tasks:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
 }
 
 
-button.update-task {
-  background-color: var(--blue-desat);
+img#clear-tasks {
+  width: 26px;
+  height: 22px;
 }
-button.update-task:hover {
-  background-color: var(--blue-sat);
+img#clear-tasks:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
+}
+
+
+img#question-mark {
+  width: 25px;
+  height: 25px;
+}
+img#question-mark:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
 }
 
 
@@ -139,17 +152,6 @@ img.run-task {
   height: 25px;
 }
 img.run-task:hover {
-  position: relative;
-  bottom: 2px;
-  cursor: pointer;
-}
-
-
-img#run-tasks {
-  width: 25px;
-  height: 25px;
-}
-img#run-tasks:hover {
   position: relative;
   bottom: 2px;
   cursor: pointer;
@@ -178,14 +180,11 @@ img.delete-task:hover {
 }
 
 
-img#clear-tasks {
-  width: 26px;
-  height: 22px;
+button.update-task {
+  background-color: var(--blue-desat);
 }
-img#clear-tasks:hover {
-  position: relative;
-  bottom: 2px;
-  cursor: pointer;
+button.update-task:hover {
+  background-color: var(--blue-sat);
 }
 
 
@@ -234,7 +233,7 @@ div.row > p {
 div#no-tasks-loaded {
   margin: 8px;
   padding-right: 8px;
-  padding-left: 12px;
+  padding-left: 4px;
 }
 
 span#version-number {

@@ -127,6 +127,8 @@ function editTask(i) {
   changeView("edit-view");
 }
 
+
+
 // The edit button function for file picker fields on the edit view.
 // Hides the text box and button and shows the file picker.
 function showTaskFilePicker(name) {
@@ -256,6 +258,11 @@ function runTask(i) {
   ipcRenderer.send("run-task", taskStr);
 }
 
+
+function helpMenu() {
+  document.getElementById("task-form").reset();
+  changeView("help-view");
+}
 
 
 Date.prototype.mmddyyyy = function() {
