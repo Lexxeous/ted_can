@@ -253,7 +253,7 @@ function confirmRunTask(i) {
 function runTask(i) {
   let taskStr = generateCommand(tasks[i]);
   setDisplay("confirm-run-task-dialog", false);
-  console.log(taskStr);
+  ipcRenderer.send("run-task", taskStr);
 }
 
 
@@ -293,5 +293,10 @@ ipcRenderer.on("load-done", (_, data) => {
   setDisplay("no-tasks-loaded", false);
 });
 ipcRenderer.on("load-canceled", (_) => {
+  setDisplay("loading-dialog", false);
+});
+
+
+ipcRender.on("run-task-done", (_) => {
   setDisplay("loading-dialog", false);
 });

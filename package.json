@@ -1,12 +1,12 @@
 {
-  "name": "ted_cmd",
-  "version": "1.0.0",
+  "name": "ted_can",
+  "version": "2.1.0",
   "description": "A software interface for Testing, Evaluating, and Demonstrating a hardware testbed for the CAN protocol.",
   "main": "boardcmd.js",
   "scripts": {
     "start": "electron app.js"
   },
-  "author": "Jordan Johnson",
+  "author": "Jordan Johnson & Jonathan Gibson",
   "license": "ISC",
   "dependencies": {
     "shelljs": "^0.8.3",
@@ -15,5 +15,5 @@
   "devDependencies": {
     "electron": "^4.0.4"
   },
-  "repository": "https://github.com/jordanjohnson56/ted-app"
+  "repository": "https://github.com/Lexxeous/ted_can"
 }

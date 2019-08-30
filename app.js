@@ -1,7 +1,10 @@
 // This is the server file
 
 const {app, BrowserWindow, ipcMain, dialog} = require("electron");
+const shell = require("shelljs");
+// shell.config.execPath = shell.which("node")
 const fs = require("fs");
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -70,6 +73,7 @@ ipcMain.on("save", (event, tasks) => {
   });
 });
 
+
 ipcMain.on("load", (event) => {
   dialog.showOpenDialog({properties: ['openFile', 'openDirectory'], defaultPath: "./tasks"}, (filepath) => {
     if(filepath === undefined) {
@@ -91,4 +95,11 @@ ipcMain.on("load", (event) => {
       event.sender.send("load-done", JSON.parse(data));
     });
   });
+});
+
+
+ipcMain.on("run-task", (event, taskStr) => {
+  console.log(taskStr);
+  // shell.exec(taskStr);
+  event.sender.send("run-task-done");
 });
