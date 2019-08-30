@@ -43,6 +43,7 @@ h1.title {
 }
 .io-button {
   padding-right: 8px;
+  padding-left: 8px;
 }
 
 
@@ -144,6 +145,17 @@ img.run-task:hover {
 }
 
 
+img#run-tasks {
+  width: 25px;
+  height: 25px;
+}
+img#run-tasks:hover {
+  position: relative;
+  bottom: 2px;
+  cursor: pointer;
+}
+
+
 img.edit-task {
   width: 25px;
   height: 25px;
@@ -167,12 +179,12 @@ img.delete-task:hover {
 
 
 img#clear-tasks {
-  width: 25px;
-  height: 25px;
-  position: absolute;
-  right: 16px;
+  width: 26px;
+  height: 22px;
 }
 img#clear-tasks:hover {
+  position: relative;
+  bottom: 2px;
   cursor: pointer;
 }
 
@@ -222,7 +234,7 @@ div.row > p {
 div#no-tasks-loaded {
   margin: 8px;
   padding-right: 8px;
-  padding-left: 8px;
+  padding-left: 12px;
 }
 
 span#version-number {

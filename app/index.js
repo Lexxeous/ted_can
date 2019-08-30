@@ -297,6 +297,6 @@ ipcRenderer.on("load-canceled", (_) => {
 });
 
 
-ipcRender.on("run-task-done", (_) => {
+ipcRenderer.on("run-task-done", (_) => {
   setDisplay("loading-dialog", false);
 });
