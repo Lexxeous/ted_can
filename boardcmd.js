@@ -180,7 +180,7 @@ if (argv._[0] === "make" || argv._[0] === "all") {
 if (argv._[0] === "flash" || argv._[0] === "all") {
   // Verify that ipecmd is available.
   if (!shell.which("ipecmd")) {
-    console.log("ipecmd not available.");
+    console.log("Cannot run this task, ipecmd not available.");
   } else {
     // Adjust device name to fit the ipecmd format.
     let part_name = argv.device_type;

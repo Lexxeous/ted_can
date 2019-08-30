@@ -188,7 +188,7 @@ function newTask() {
 
 // Cancel a dialog box by closing it.
 function cancelDialog() {
-  setDisplay("confirm-dialog", false);
+  setDisplay("confirm-delete-task-dialog", false);
 }
 function cancelClearTasksDialog() {
   setDisplay("confirm-clear-tasks-dialog", false);
@@ -200,12 +200,12 @@ function cancelRunTaskDialog() {
 
 function confirmDelete(i) { // show a confirmation box before deleting a task.
   let deleteButton = document.getElementById("dialog-delete-button"); // get the delete button by id
-  setDisplay("confirm-dialog", true); // show the dialog box.
+  setDisplay("confirm-delete-task-dialog", true); // show the dialog box.
   deleteButton.onclick = () => deleteTask(i);
 }
 function deleteTask(i) { // delete a task from the list.
   tasks.splice(i, 1); // delete the appropriate task at index i
-  setDisplay("confirm-dialog", false); // hide the dialog box.
+  setDisplay("confirm-delete-task-dialog", false); // hide the dialog box.
   refreshTasks(); // refresh the tasks list.
   if(tasks.length <= 0) {
     console.warn("No tasks available to list.");
