@@ -2,7 +2,7 @@
 
 const {app, BrowserWindow, ipcMain, dialog} = require("electron");
 const shell = require("shelljs");
-// shell.config.execPath = shell.which("node")
+shell.config.execPath = shell.which("node").toString();
 const fs = require("fs");
 
 
@@ -67,7 +67,6 @@ ipcMain.on("save", (event, tasks) => {
         console.error(err);
         return;
       }
-  
       event.sender.send("save-done");
     });
   });
@@ -91,7 +90,6 @@ ipcMain.on("load", (event) => {
         event.sender.send("load-canceled");
         return;
       }
-
       event.sender.send("load-done", JSON.parse(data));
     });
   });
@@ -99,7 +97,11 @@ ipcMain.on("load", (event) => {
 
 
 ipcMain.on("run-task", (event, taskStr) => {
+  if (!shell.which('node')) {
+    shell.echo("Sorry, running a task requires node.");
+    shell.exit(1);
+  }
   console.log(taskStr);
-  // shell.exec(taskStr);
+  shell.exec(taskStr);
   event.sender.send("run-task-done");
 });
