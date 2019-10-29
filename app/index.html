@@ -83,11 +83,6 @@
       <span> No task(s) loaded... </span>
     </div>
   </div>
-  
-
-
-  
-
 
 
   <!------------------------------------------------- Edit View ------------------------------------------------->
@@ -148,21 +143,29 @@
   <div id="help-view" style="display: none" class="view">
     <h1 class="title row">Help:</h1>
     <button class="close close-view">&times;</button>
+
+    <h6>description of the application</h6>
+    <h6>meaning of the buttons on the main menu</h6>
+    <h6>acknowledgements and the TTU logo</h6>
+
+    
+
+    <span id="build-number"> Build –
+      <script type="text/javascript" src="index.js">
+        document.write(getBuildNumber());
+      </script>
+    </span>
+
+    <span id="version-number">
+      Version – 2.1.0
+    </span>
   </div>
 
 
 
   <!---------------------------------------------- Footers ---------------------------------------------->
 
-  <span id="build-number"> Build –
-    <script type="text/javascript" src="index.js">
-      document.write(getBuildNumber());
-    </script>
-  </span>
-
-  <span id="version-number">
-    Version – 2.1.0
-  </span>
+  
 
 
   <script type="text/javascript" src="index.js"></script>

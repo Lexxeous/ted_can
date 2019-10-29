@@ -4,8 +4,8 @@
         "device_class": "dsPIC33EV256GM106",
         "device_name": "ECU1",
         "program": "33EV_main_v11.c",
-        "project": "C:\\Users\\jorda\\MPLABXProjects\\DM330018_Starter_Kit_Demo.X",
-        "scenario": "C:\\Users\\jorda\\Google Drive\\School\\Grad School\\ted_app\\data_standard.txt"
+        "project": "C:\\Users\\Alex Gibson\\MPLABXProjects\\DM330018_Starter_Kit_Demo.X",
+        "scenario": "C:\\Users\\Alex Gibson\\Desktop\\ted_can\\data_standard.txt"
     },
     {
         "command": "all",

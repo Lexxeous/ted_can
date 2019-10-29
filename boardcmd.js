@@ -179,6 +179,8 @@ if (argv._[0] === "make" || argv._[0] === "all") {
 // COMMAND: FLASH. Flash a hex file onto an ECU. Also runs this if all is the command.
 if (argv._[0] === "flash" || argv._[0] === "all") {
   // Verify that ipecmd is available.
+  // "/Applications/microchip/mplabx/v5.20/mplab_platform/mplab_ipe/ipecmd.jar" on macOS
+  // "C:\Program Files (x86)\Microchip\MPLABX\v5.20\mplab_platform\mplab_ipe\ipecmd.jar" on Windows
   if (!shell.which("ipecmd")) {
     console.log("Cannot run this task, ipecmd not available.");
   } else {
@@ -194,6 +196,7 @@ if (argv._[0] === "flash" || argv._[0] === "all") {
     cmd += " -P" + part_name;
     // Specify hex file from directory structure.
     cmd += " -F" + (hex_file || argv.hex_file);
+    console.log(cmd);
     shell.exec(cmd);
   }
 }
