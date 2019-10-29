@@ -74,18 +74,24 @@ ipcMain.on("save", (event, tasks) => {
 
 
 ipcMain.on("load", (event) => {
-  dialog.showOpenDialog({properties: ['openFile', 'openDirectory'], defaultPath: "./tasks"}, (filepath) => {
-    if(filepath === undefined) {
+  dialog.showOpenDialog({
+    defaultPath: "./tasks",
+    filters: [{name: 'Tasks', extensions: ['json']}]}, (filepath) => {
+    if(filepath === undefined)
+    {
       console.warn("No load file selected.");
       event.sender.send("load-canceled");
       return;
     }
-    if(filepath == null || filepath == "") {
+    if(filepath == null || filepath == "")
+    {
       console.warn("Task file is empty.");
       return;
     }
-    fs.readFile(filepath[0], (err, data) => {
-      if(err) {
+    fs.readFile(filepath[0], (err, data) =>
+    {
+      if(err)
+      {
         console.error(err);
         event.sender.send("load-canceled");
         return;
@@ -102,6 +108,6 @@ ipcMain.on("run-task", (event, taskStr) => {
     shell.exit(1);
   }
   console.log(taskStr);
-  shell.exec(taskStr);
+  console.log(shell.exec(taskStr).stdout);
   event.sender.send("run-task-done");
 });

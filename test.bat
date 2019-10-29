@@ -1,2 +1,0 @@
-REM node .\boardcmd.js make "C:\Users\jorda\MPLABXProjects\DM330018_Starter_Kit_Demo.X" -s "C:\Users\jorda\Google Drive\School\Grad School\ted_app\data_standard.txt" -p "33EV_main_v11.c"
-node .\boardcmd.js all "dsPIC33EV256GM106" "C:\Users\jorda\MPLABXProjects\DM330018_Starter_Kit_Demo.X" -s "C:\Users\jorda\Google Drive\School\Grad School\ted_app\data_standard.txt" -p "33EV_main_v11.c" -e "ECU1"

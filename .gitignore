@@ -1,1 +1,4 @@
 node_modules/*
+log.*
+test_cmd.bat
+Notes.md
