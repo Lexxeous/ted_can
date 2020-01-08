@@ -15,7 +15,10 @@ function createWindow() {
   window = new BrowserWindow({
     width: 800,
     height: 600,
-    autoHideMenuBar: true
+    autoHideMenuBar: true,
+    nodeIntegration: false, // will be set to false by default starting with Electron 5.0.0
+    contextIsolation: false // disable if dealing with only local application files, no remote security threats
+
   });
   // and load the index.html of the app.
   window.loadURL(`file://${__dirname}/app/index.html`)

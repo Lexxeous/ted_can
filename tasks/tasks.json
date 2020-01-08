@@ -1,6 +1,6 @@
 [
     {
-        "command": "all",
+        "command": "flash",
         "device_class": "dsPIC33EV256GM106",
         "device_name": "ECU1",
         "program": "33EV_main_v11.c",
