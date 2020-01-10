@@ -50,8 +50,8 @@ const argv = require("yargs")
     describe: "scenario file to be used when building project"
   })
   .option("p", {
-    alias: "protocol",
-    describe: "name of the protocol file (must be in project dir)"
+    alias: "program",
+    describe: "name of the program file (must be in project directory)"
   })
   .implies("s", "p")
   .option("e", {
@@ -67,19 +67,22 @@ const argv = require("yargs")
 
 // Verify that a valid command is used.
 if (argv._[0] !== "make" && argv._[0] !== "flash" && argv._[0] !== "all") {
-  console.log(argv._[0] + " is not a valid command, try make, flash, or all");
+  console.log(argv._[0] + " is not a valid command, try \'make\', \'flash\', or \'all\'.");
   process.exit(1);
 }
 
 // Function that returns the new data for the written file. Separated to allow changes to be made easily.
-function getDataToWrite(protocol_file, bytes) {
+function getDataToWrite(program_file, bytes) {
   // Current method. Replaces a specific set of characters with the new code.
-  return protocol_file.replace("// 0000 INSERT MESSAGE 0000 //\r\n", bytes);
+  return program_file.replace("// 0000 INSERT MESSAGE 0000 //\r\n", bytes);
 }
 
 
 // Need this to tell if all is called in the flash function.
 var hex_file;
+
+shell.exec("python usbhub3p_ctrl.py " + argv.ecu_name);
+
 
 // COMMAND: MAKE. Builds an MPLab project. Also runs this if all is the command.
 if (argv._[0] === "make" || argv._[0] === "all") {
@@ -87,8 +90,8 @@ if (argv._[0] === "make" || argv._[0] === "all") {
   if (!shell.which("make")) {
     console.log("make is not available.");
   } else {
-    // These will be used to rewrite the original protocol file if it is changed.
-    var protocol_file, protocol_path;
+    // These will be used to rewrite the original program file if it is changed.
+    var program_file, program_path;
 
     // Do this if there is a scenario file to be included.
     if (argv.scenario) {
@@ -119,7 +122,7 @@ if (argv._[0] === "make" || argv._[0] === "all") {
         messages[ecu_name].total++;
       });
 
-      // Go through the ECU's messages and create its edited protocol (.c) file.
+      // Go through the ECU's messages and create its edited program (.c) file.
       let ecu_name = argv.ecu_name;
       // String containing information to be written to the file.
       var bytes = "struct Message messages[" + messages[ecu_name].total + "] = {\r\n";
@@ -145,15 +148,15 @@ if (argv._[0] === "make" || argv._[0] === "all") {
       // Finish off the data.
       bytes = bytes.slice(0, -1) + "};\r\n";
 
-      // String that points to protocol file.
-      protocol_path = path.resolve(path.join(argv.project_directory, argv.protocol));
+      // String that points to program file.
+      program_path = path.resolve(path.join(argv.project_directory, argv.program));
 
-      // Open the protocol file specified by the user.
-      protocol_file = fs.readFileSync(protocol_path, { encoding: "utf8" });
+      // Open the program file specified by the user.
+      program_file = fs.readFileSync(program_path, { encoding: "utf8" });
 
-      // Write the data to the protocol file.
-      let full_data = getDataToWrite(protocol_file, bytes);
-      fs.writeFileSync(protocol_path, full_data);
+      // Write the data to the program file.
+      let full_data = getDataToWrite(program_file, bytes);
+      fs.writeFileSync(program_path, full_data);
 
       // Go to project directory.
       shell.cd(argv.project_directory);
@@ -162,7 +165,7 @@ if (argv._[0] === "make" || argv._[0] === "all") {
       shell.exec("make");
 
       // Revert file changes.
-      fs.writeFileSync(protocol_path, protocol_file);
+      fs.writeFileSync(program_path, program_file);
 
       // Update this in case this is the all command.
       if (argv.custom_hex) {
@@ -176,7 +179,7 @@ if (argv._[0] === "make" || argv._[0] === "all") {
   }
 }
 
-// COMMAND: FLASH. Flash a hex file onto an ECU. Also runs this if all is the command.
+// COMMAND: "flash". Flash a hex file onto an ECU. Also runs this if "all" is the command.
 if (argv._[0] === "flash" || argv._[0] === "all") {
   // Verify that ipecmd is available.
   // "/Applications/microchip/mplabx/v5.20/mplab_platform/mplab_ipe/ipecmd.jar" on macOS

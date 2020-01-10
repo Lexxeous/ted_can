@@ -107,7 +107,7 @@ ipcMain.on("load", (event) => {
 
 ipcMain.on("run-task", (event, taskStr) => {
   if (!shell.which('node')) {
-    shell.echo("Sorry, running a task requires node.");
+    shell.echo("Sorry, running a task requires \'node\'.");
     shell.exit(1);
   }
   console.log(taskStr);
