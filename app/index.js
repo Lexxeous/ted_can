@@ -10,13 +10,13 @@ function generateCommand(task) {
   let commandString = "node boardcmd.js ";
   commandString += task.command + " ";
 
-  if("device_class" in task) commandString += "\"" + task.device_class + "\" ";
+  if("device_type" in task) commandString += "\"" + task.device_type + "\" ";
   
-  commandString += "\"" + task.project + "\" ";
+  commandString += "\"" + task.project_dir + "\" ";
 
-  if("scenario" in task) commandString += "-s \"" + task.scenario + "\" ";
-  if("program" in task) commandString += "-p \"" + task.program + "\" ";
-  if("device_name" in task) commandString += "-e \"" + task.device_name + "\" ";
+  if("scenario_file" in task) commandString += "-s \"" + task.scenario_file + "\" ";
+  if("program_file" in task) commandString += "-p \"" + task.program_file + "\" ";
+  if("ecu_id" in task) commandString += "-e \"" + task.ecu_id + "\" ";
 
   return commandString;
 }
@@ -107,11 +107,11 @@ function editTask(i) {
 
   // Set task property fields.
   document.getElementById("task-command").value = e.command;
-  document.getElementById("task-device-class").value = e.device_class;
-  document.getElementById("task-project-text").value = e.project;
-  document.getElementById("task-scenario-text").value = e.scenario || "";
-  document.getElementById("task-program-text").value = e.program || "";
-  document.getElementById("task-device-name").value = e.device_name || "";
+  document.getElementById("task-project_dir-text").value = e.project_dir;
+  document.getElementById("task-program_file-text").value = e.program_file || "";
+  document.getElementById("task-scenario_file-text").value = e.scenario_file || "";
+  document.getElementById("task-device_type").value = e.device_type;
+  document.getElementById("task-ecu_id").value = e.ecu_id || "";
 
   // Hide all the file pickers.
   let taskFileTexts = document.getElementsByClassName("task-file-text");
@@ -145,23 +145,23 @@ function updateTask() {
 
   // Update the simple values for the task.
   task.command = document.getElementById("task-command").value;
-  task.device_class = document.getElementById("task-device-class").value;
+  task.device_type = document.getElementById("task-device_type").value;
 
   // Set the device name if it was present.
-  let deviceNameField = document.getElementById("task-device-name");
-  if(deviceNameField.value) task.device_name = deviceNameField.value;
+  let ecuIdField = document.getElementById("task-ecu_id");
+  if(ecuIdField.value) task.ecu_id = ecuIdField.value;
 
   // Update the file picker values if they have been changed.
-  let taskProjectPicker = document.getElementById("task-project");
-  let taskScenarioPicker = document.getElementById("task-scenario");
-  let taskProgramPicker = document.getElementById("task-program");
+  let taskProjectDirPicker = document.getElementById("task-project_dir");
+  let taskScenarioFilePicker = document.getElementById("task-scenario_file");
+  let taskProgramFilePicker = document.getElementById("task-program_file");
 
-  if(taskProjectPicker.files[0])
-    task.project = taskProjectPicker.files[0].path;
-  if(taskScenarioPicker.files[0])
-    task.scenario = taskScenarioPicker.files[0].path;
-  if(taskProgramPicker.files[0])
-    task.program = taskProgramPicker.files[0].path;
+  if(taskProjectDirPicker.files[0])
+    task.project_dir = taskProjectDirPicker.files[0].path;
+  if(taskScenarioFilePicker.files[0])
+    task.scenario_file = taskScenarioFilePicker.files[0].path;
+  if(taskProgramFilePicker.files[0])
+    task.program_file = taskProgramFilePicker.files[0].path;
 
   // Refresh the task list to reflect updated information.
   refreshTasks();
@@ -173,8 +173,8 @@ function updateTask() {
 function newTask() {
   let task = { // add a new task with these default values.
     command: "all",
-    device_class: "",
-    project: ""
+    device_type: "",
+    project_dir: ""
   };
   if(tasks === undefined) { // tasks is "undefined" if there are no tasks loaded
     tasks = []; // create an empty array for "tasks"

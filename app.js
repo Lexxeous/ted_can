@@ -14,7 +14,7 @@ function createWindow() {
   // Create the browser window.
   window = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 700,
     autoHideMenuBar: true,
     nodeIntegration: false, // will be set to false by default starting with Electron 5.0.0
     contextIsolation: false // disable if dealing with only local application files, no remote security threats

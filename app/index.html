@@ -98,36 +98,36 @@
         <!-- Task Type -->
         <label for="task-command">Command:</label>
         <select name="task-command" id="task-command">
-          <option value="all">All</option>
+          <option value="all">All (Make & Flash)</option>
           <option value="make">Make</option>
           <option value="flash">Flash</option>
         </select>
 
-        <!-- Device Class -->
-        <label for="task-device-class">Device Class:</label>
-        <input type="text" name="task-device-class" id="task-device-class">
-
-        <!-- Project Folder -->
-        <label for="task-project-text">Project Folder:</label>
-        <input type="text" name="task-project" id="task-project-text" class="task-file-text" readonly>
-        <button type="button" class="task-edit-file" id="task-project-btn" onclick="showTaskFilePicker('task-project')">Edit</button>
-        <input style="display: none" type="file" name="task-project" id="task-project" class="task-file-picker" webkitdirectory>
-
-        <!-- Scenario File -->
-        <label for="task-scenario-text">Scenario File:</label>
-        <input type="text" name="task-scenario" id="task-scenario-text" class="task-file-text" readonly>
-        <button type="button" class="task-edit-file" id="task-scenario-btn" onclick="showTaskFilePicker('task-scenario')">Edit</button>
-        <input style="display: none" type="file" name="task-scenario" id="task-scenario" class="task-file-picker" accept=".txt">
+        <!-- Project Directory -->
+        <label for="task-project_dir-text">Project Directory (Make):</label>
+        <input type="text" name="task-project_dir" id="task-project_dir-text" class="task-file-text" readonly>
+        <button type="button" class="task-edit-file" id="task-project_dir-btn" onclick="showTaskFilePicker('task-project_dir')">Edit</button>
+        <input style="display: none" type="file" name="task-project_dir" id="task-project_dir" class="task-file-picker" webkitdirectory>
 
         <!-- Program File -->
-        <label for="task-program-text">Program File:</label>
-        <input type="text" name="task-program" id="task-program-text" class="task-file-text" readonly>
-        <button type="button" class="task-edit-file" id="task-program-btn" onclick="showTaskFilePicker('task-program')">Edit</button>
-        <input style="display: none" type="file" name="task-program" id="task-program" class="task-file-picker" accept=".c">
+        <label for="task-program_file-text">Program File (Make):</label>
+        <input type="text" name="task-program_file" id="task-program_file-text" class="task-file-text" readonly>
+        <button type="button" class="task-edit-file" id="task-program_file-btn" onclick="showTaskFilePicker('task-program_file')">Edit</button>
+        <input style="display: none" type="file" name="task-program_file" id="task-program_file" class="task-file-picker" accept=".c">
 
-        <!-- Device Name -->
-        <label for="task-device-name">Device Name:</label>
-        <input type="text" name="task-device-name" id="task-device-name">
+        <!-- Scenario File -->
+        <label for="task-scenario_file-text">Scenario File (Make):</label>
+        <input type="text" name="task-scenario_file" id="task-scenario_file-text" class="task-file-text" readonly>
+        <button type="button" class="task-edit-file" id="task-scenario_file-btn" onclick="showTaskFilePicker('task-scenario_file')">Edit</button>
+        <input style="display: none" type="file" name="task-scenario_file" id="task-scenario_file" class="task-file-picker" accept=".txt">
+
+        <!-- Device Type -->
+        <label for="task-device_type">Device Type (Flash):</label>
+        <input type="text" name="task-device_type" id="task-device_type">
+
+        <!-- ECU ID -->
+        <label for="task-ecu_id">ECU ID (Flash):</label>
+        <input type="text" name="task-ecu_id" id="task-ecu_id">
 
         <!-- Actions -->
         <div class="right-side">

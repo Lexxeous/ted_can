@@ -7,11 +7,11 @@ const path = require("path");
 const argv = require("yargs")
   .usage("Usage: $0 <command> [options]")
   .command({
-    command: "make [project_directory]",
+    command: "make [project_dir]",
     alias: "m",
     describe: "build an MPLab project",
     builder: yargs => {
-      yargs.positional("project_directory", {
+      yargs.positional("project_dir", {
         describe: "directory for MPLab project",
         default: "."
       });
@@ -32,7 +32,7 @@ const argv = require("yargs")
     }
   })
   .command({
-    command: "all <device_type> [project_directory]",
+    command: "all <device_type> [project_dir]",
     alias: "a",
     describe: "build a project and then flash it onto an ECU",
     builder: yargs => {
@@ -40,17 +40,17 @@ const argv = require("yargs")
         .positional("device_type", {
           describe: "name of device e.g. dsPIC33EV256GM106"
         })
-        .positional("project_directory", {
+        .positional("project_dir", {
           describe: "directory for MPLab project"
         });
     }
   })
   .option("s", {
-    alias: "scenario",
+    alias: "scenario_file",
     describe: "scenario file to be used when building project"
   })
   .option("p", {
-    alias: "program",
+    alias: "program_file",
     describe: "name of the program file (must be in project directory)"
   })
   .implies("s", "p")
@@ -61,13 +61,13 @@ const argv = require("yargs")
   .implies("s", "e")
   .option("h", {
     alias: "custom_hex",
-    describe: "use with all if hex file is not in <project_dir>/dist/default/production"
+    describe: "use with \"all\" command if hex file is not in <project_dir>/dist/default/production"
   })
   .demandCommand(1).argv;
 
 // Verify that a valid command is used.
 if (argv._[0] !== "make" && argv._[0] !== "flash" && argv._[0] !== "all") {
-  console.log(argv._[0] + " is not a valid command, try \'make\', \'flash\', or \'all\'.");
+  console.log(argv._[0] + " is not a valid command, try \"make\", \"flash\", or \"all\".");
   process.exit(1);
 }
 
@@ -79,22 +79,28 @@ function getDataToWrite(program_file, bytes)
 }
 
 
-// Need this to tell if all is called in the flash function.
+// Need this to tell if "all" is called in the "flash" function.
 var hex_file;
 
-// COMMAND: MAKE. Builds an MPLab project. Also runs this if all is the command.
-if (argv._[0] === "make" || argv._[0] === "all") {
+
+// COMMAND: "make". Builds an MPLab project. Also runs this if "all" is the command.
+if (argv._[0] === "make" || argv._[0] === "all")
+{
   // Verify that make is available.
-  if (!shell.which("make")) {
+  if (!shell.which("make"))
+  {
     console.log("make is not available.");
-  } else {
+  }
+  else
+  {
     // These will be used to rewrite the original program file if it is changed.
     var program_file, program_path;
 
     // Do this if there is a scenario file to be included.
-    if (argv.scenario) {
+    if (argv.scenario_file)
+    {
       // Read in scenario file.
-      let data = fs.readFileSync(argv.scenario, { encoding: "utf8" });
+      let data = fs.readFileSync(argv.scenario_file, { encoding: "utf8" });
 
       // List of messages to be sent/received by the ECU's.
       var messages = {};
@@ -106,7 +112,8 @@ if (argv._[0] === "make" || argv._[0] === "all") {
         let idx = values[0]; // row index
         let ecu_id = values[1]; // ECU<n>
         let send_mode = values[2]; // Tx or Rx
-        if (!messages.hasOwnProperty(ecu_id)) {
+        if (!messages.hasOwnProperty(ecu_id))
+        {
           messages[ecu_id] = {
             Tx: [],
             Rx: [],
@@ -121,10 +128,8 @@ if (argv._[0] === "make" || argv._[0] === "all") {
         messages[ecu_id].total++;
       });
 
-      // Go through the ECU's messages and create its edited program (.c) file.
-      let ecu_id = argv.ecu_id;
-      // String containing information to be written to the file.
-      var bytes = "struct Message messages[" + messages[ecu_id].total + "] = {\r\n";
+      let ecu_id = argv.ecu_id; // go through the ECU's messages and create its edited program (.c) file
+      var bytes = "struct Message messages[" + messages[ecu_id].total + "] = {\r\n"; // information to be written to file
 
       // Format the transmit data to be used in the C file.
       messages[ecu_id].Tx.forEach(m => {
@@ -144,33 +149,27 @@ if (argv._[0] === "make" || argv._[0] === "all") {
         // The comes out to something like `{0, "ECU1", "Rx", 101, {}}`.
         bytes += '{0, "' + ecu_id + '", "Rx", ' + m.message_id + ", {}},\r\n";
       });
-      // Finish off the data.
-      bytes = bytes.slice(0, -1) + "};\r\n";
-
-      // String that points to program file.
-      program_path = path.resolve(path.join(argv.project_directory, argv.program));
-
-      // Open the program file specified by the user.
-      program_file = fs.readFileSync(program_path, { encoding: "utf8" });
+      
+      bytes = bytes.slice(0, -1) + "};\r\n"; // finish off the data
+      program_path = path.resolve(path.join(argv.project_dir, argv.program)); // string that points to program file
+      program_file = fs.readFileSync(program_path, { encoding: "utf8" }); // open the program file specified by the user
 
       // Write the data to the program file.
       let full_data = getDataToWrite(program_file, bytes);
       fs.writeFileSync(program_path, full_data);
 
-      // Go to project directory.
-      shell.cd(argv.project_directory);
+      shell.cd(argv.project_dir); // go to the project directory
+      shell.exec("make"); // execute "make" in the project directory to compile the hex file
+      fs.writeFileSync(program_path, program_file); // revert file changes
 
-      // Execute make in the project directory to compile the hex file.
-      shell.exec("make");
-
-      // Revert file changes.
-      fs.writeFileSync(program_path, program_file);
-
-      // Update this in case this is the all command.
-      if (argv.custom_hex) {
-        hex_file = argv.hexfile;
-      } else {
-        let output_dir = path.join(argv.project_directory, "dist/default/production");
+      // Update this in case this is the "all" command.
+      if(argv.custom_hex)
+      {
+        hex_file = argv.hex_file;
+      }
+      else
+      {
+        let output_dir = path.join(argv.project_dir, "dist/default/production");
         let hex_file_name = fs.readdirSync(output_dir).find(e => path.extname(e) === ".hex");
         hex_file = path.join(output_dir, hex_file_name);
       }
@@ -198,13 +197,14 @@ if (argv._[0] === "flash" || argv._[0] === "all") {
     // Prepare ipecmd.
     let cmd = "ipecmd -TPPKOB -M -OL";
     cmd += " -P" + part_name; // specify the <part_name> option given by the user
-    cmd += " -F" + (hex_file || argv.hex_file); // specify <hex_file> optoin given by the user from directory structure
+    cmd += " -F" + (hex_file || argv.hex_file); // specify <hex_file> option given by the user from directory structure
     cmd += " -TS"+ "BUR171520074" // specify the <sn> given by the user to uniquely identify the MCU
 
-    if(argv.ecu_id == undefined)
+    if(argv.device_type == undefined || argv.hex_file == undefined || argv.ecu_id == undefined)
     {
       console.log("\nERROR::160::BAD_ARGUMENTS")
-      console.log("You must specify an ECU ID option like: \"-e ECU<n>\" (0 ≤ n < 7) to flash a board.")
+      console.log("You must specify a device type, a hex file, and an ECU ID like:")
+      console.log("\"node boardcmd.js flash <device_type> <hex_file_path> -e ECU<n>\" (where: 0 ≤ n < 7) to flash a board.")
       process.exit();
     }
 
