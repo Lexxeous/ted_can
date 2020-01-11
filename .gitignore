@@ -1,4 +1,5 @@
 node_modules/*
 log.*
+MPLABXLog.*
 test_cmd.bat
 Notes.md

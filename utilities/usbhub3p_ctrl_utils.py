@@ -16,5 +16,5 @@ def hub3p_isolate_port(s, p):
 		if (i != p):
 			s.usb.setPortDisable(i)
 		else:
-			print "Disabling all ports except port number " + str(p) + "..." 
+			print "Disabling all ports except port number " + str(p) + "...\n" 
 			s.usb.setPortEnable(p)

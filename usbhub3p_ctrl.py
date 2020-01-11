@@ -7,13 +7,26 @@
 # This file is part of the BrainStem development package.
 # See file LICENSE or go to https://acroname.com/software/brainstem-development-kit for full license details.
 
+#----------------------------------------------------- References ----------------------------------------------------#
+
+'''
+Pass data back and forth with JS and Python using AJAX and/or child processes:
+https://healeycodes.com/javascript/python/beginners/webdev/2019/04/11/talking-between-languages.html
+'''
+
 #--------------------------------------------- Import Necessary Libraries --------------------------------------------#
 
+# From "Brainstem" SDK
 import brainstem
 from brainstem.result import Result # for easy access to error constants
+
+# The "pip" installs
+
+
+# Python Defaults
 import time
 import os.path
-import sys # for sys.argv[n]
+import sys # for managing command line arguments (sys.argv[n])
 
 #------------------------------------------- Import Custom Utility Modules -------------------------------------------#
 

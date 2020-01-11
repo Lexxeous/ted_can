@@ -55,7 +55,7 @@ const argv = require("yargs")
   })
   .implies("s", "p")
   .option("e", {
-    alias: "ecu_name",
+    alias: "ecu_id",
     describe: "name of the ECU from the scenario file being programmed"
   })
   .implies("s", "e")
@@ -72,7 +72,8 @@ if (argv._[0] !== "make" && argv._[0] !== "flash" && argv._[0] !== "all") {
 }
 
 // Function that returns the new data for the written file. Separated to allow changes to be made easily.
-function getDataToWrite(program_file, bytes) {
+function getDataToWrite(program_file, bytes)
+{
   // Current method. Replaces a specific set of characters with the new code.
   return program_file.replace("// 0000 INSERT MESSAGE 0000 //\r\n", bytes);
 }
@@ -80,9 +81,6 @@ function getDataToWrite(program_file, bytes) {
 
 // Need this to tell if all is called in the flash function.
 var hex_file;
-
-shell.exec("python usbhub3p_ctrl.py " + argv.ecu_name);
-
 
 // COMMAND: MAKE. Builds an MPLab project. Also runs this if all is the command.
 if (argv._[0] === "make" || argv._[0] === "all") {
@@ -101,34 +99,35 @@ if (argv._[0] === "make" || argv._[0] === "all") {
       // List of messages to be sent/received by the ECU's.
       var messages = {};
 
-      // Get each line and parse it, separating out the messages for each ECU.
+      // Get each line from the scenario file and parse it, separating out the messages for each ECU.
       // TODO: Allow for formats such as DBC
       data.split("\r\n").forEach(function (e) {
         let values = e.split(" ");
-        let ecu_name = values[1];
-        let send_mode = values[2];
-        if (!messages.hasOwnProperty(ecu_name)) {
-          messages[ecu_name] = {
+        let idx = values[0]; // row index
+        let ecu_id = values[1]; // ECU<n>
+        let send_mode = values[2]; // Tx or Rx
+        if (!messages.hasOwnProperty(ecu_id)) {
+          messages[ecu_id] = {
             Tx: [],
             Rx: [],
             total: 0
           };
         }
-        messages[ecu_name][send_mode].push({
+        messages[ecu_id][send_mode].push({
           sequence_number: values[0],
-          message_id: values[3],
-          data: values.slice(4)
+          message_id: values[3], // the arbitration ID
+          data: values.slice(4) // 8 bytes of hexidecimal formatted CAN payload
         });
-        messages[ecu_name].total++;
+        messages[ecu_id].total++;
       });
 
       // Go through the ECU's messages and create its edited program (.c) file.
-      let ecu_name = argv.ecu_name;
+      let ecu_id = argv.ecu_id;
       // String containing information to be written to the file.
-      var bytes = "struct Message messages[" + messages[ecu_name].total + "] = {\r\n";
+      var bytes = "struct Message messages[" + messages[ecu_id].total + "] = {\r\n";
 
       // Format the transmit data to be used in the C file.
-      messages[ecu_name].Tx.forEach(m => {
+      messages[ecu_id].Tx.forEach(m => {
         // Convert the eight data (string) values into four C-compliant hexadecimal values.
         // The final format of this string is `{0xXXXX, 0xXXXX, 0xXXXX, 0xXXXX}`.
         let data = "{0x" + m.data.map((e, j, a) => {
@@ -137,13 +136,13 @@ if (argv._[0] === "make" || argv._[0] === "all") {
         }).filter(e => e).join(", 0x") + "}";
 
         // The comes out to something like `{1, "ECU1", "Tx", 101, {0xXXXX, 0xXXXX, 0xXXXX, 0xXXXX}}`.
-        bytes += "{" + m.sequence_number + ', "' + ecu_name + '", "Tx", ' + m.message_id + ", " + data + "},\r\n";
+        bytes += "{" + m.sequence_number + ', "' + ecu_id + '", "Tx", ' + m.message_id + ", " + data + "},\r\n";
       });
 
       // Format the receive data to be used in the C file.
-      messages[ecu_name].Rx.forEach(m => {
+      messages[ecu_id].Rx.forEach(m => {
         // The comes out to something like `{0, "ECU1", "Rx", 101, {}}`.
-        bytes += '{0, "' + ecu_name + '", "Rx", ' + m.message_id + ", {}},\r\n";
+        bytes += '{0, "' + ecu_id + '", "Rx", ' + m.message_id + ", {}},\r\n";
       });
       // Finish off the data.
       bytes = bytes.slice(0, -1) + "};\r\n";
@@ -184,9 +183,12 @@ if (argv._[0] === "flash" || argv._[0] === "all") {
   // Verify that ipecmd is available.
   // "/Applications/microchip/mplabx/v5.20/mplab_platform/mplab_ipe/ipecmd.jar" on macOS
   // "C:\Program Files (x86)\Microchip\MPLABX\v5.20\mplab_platform\mplab_ipe\ipecmd.jar" on Windows
-  if (!shell.which("ipecmd")) {
+  if (!shell.which("ipecmd"))
+  {
     console.log("Cannot run this task, ipecmd not available.");
-  } else {
+  }
+  else
+  {
     // Adjust device name to fit the ipecmd format.
     let part_name = argv.device_type;
     if (part_name.startsWith("PIC")) part_name = part_name.slice(3);
@@ -195,11 +197,20 @@ if (argv._[0] === "flash" || argv._[0] === "all") {
 
     // Prepare ipecmd.
     let cmd = "ipecmd -TPPKOB -M -OL";
-    // Specify part name given by user.
-    cmd += " -P" + part_name;
-    // Specify hex file from directory structure.
-    cmd += " -F" + (hex_file || argv.hex_file);
+    cmd += " -P" + part_name; // specify the <part_name> option given by the user
+    cmd += " -F" + (hex_file || argv.hex_file); // specify <hex_file> optoin given by the user from directory structure
+    cmd += " -TS"+ "BUR171520074" // specify the <sn> given by the user to uniquely identify the MCU
+
+    if(argv.ecu_id == undefined)
+    {
+      console.log("\nERROR::160::BAD_ARGUMENTS")
+      console.log("You must specify an ECU ID option like: \"-e ECU<n>\" (0 ≤ n < 7) to flash a board.")
+      process.exit();
+    }
+
+    shell.exec("python usbhub3p_ctrl.py " + argv.ecu_id) // isolate correct USB hub port
     console.log(cmd);
     shell.exec(cmd);
+    shell.exec("rm log.* && rm MPLABXLog.*") // remove all of the temporary log files
   }
 }
