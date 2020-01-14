@@ -7,69 +7,78 @@ const path = require("path");
 const argv = require("yargs")
   .usage("Usage: $0 <command> [options]")
   .command({
-    command: "make [project_dir]",
+    command: "make <device_type> <project_dir> [-s -p -e] OR [-s -p -e -h]",
     alias: "m",
-    describe: "build an MPLab project",
+    describe: "Build existing MPLABX project into a .hex file",
     builder: yargs => {
-      yargs.positional("project_dir", {
-        describe: "directory for MPLab project",
+      yargs
+      .positional("device_type", {
+        describe: "Name of MCU chip (e.g. dsPIC33EV256GM106)"
+      })
+      .positional("project_dir", {
+        describe: "Directory for existing MPLABX project",
         default: "."
       });
     }
   })
   .command({
-    command: "flash <device_type> <hex_file>",
+    command: "flash <device_type> <ecu_id> ( <project_dir> XOR <custom_hex> )",
     alias: "f",
-    describe: "flash a hex file onto an ECU",
+    describe: "Flash a .hex file onto a specific ECU",
     builder: yargs => {
       yargs
-        .positional("device_type", {
-          describe: "name of device e.g. dsPIC33EV256GM106"
-        })
-        .positional("hex_file", {
-          describe: "location of .hex file"
-        });
+      .positional("device_type", {
+        describe: "Name of MCU chip (e.g. dsPIC33EV256GM106)"
+      })
+      .positional("ecu_id", {
+        describe: "Specific ECU being programmed (e.g. ECU3)"
+      });
     }
   })
   .command({
-    command: "all <device_type> [project_dir]",
+    command: "all <device_type> <project_dir> <ecu_id> [-h] OR [-s -p] OR [-s -p -h]",
     alias: "a",
-    describe: "build a project and then flash it onto an ECU",
+    describe: "Build a project and then flash it onto a specific ECU",
     builder: yargs => {
       yargs
-        .positional("device_type", {
-          describe: "name of device e.g. dsPIC33EV256GM106"
-        })
-        .positional("project_dir", {
-          describe: "directory for MPLab project"
-        });
+      .positional("device_type", {
+        describe: "Name of MCU chip (e.g. dsPIC33EV256GM106)"
+      })
+      .positional("project_dir", {
+        describe: "Directory for existing MPLABX project"
+      })
+      .positional("ecu_id", {
+        describe: "Specific ECU being programmed (e.g. ECU3)"
+      });
     }
   })
   .option("s", {
     alias: "scenario_file",
-    describe: "scenario file to be used when building project"
+    describe: "Scenario file to be used when building existing project"
   })
   .option("p", {
     alias: "program_file",
-    describe: "name of the program file (must be in project directory)"
+    describe: "Name of .c program file (in root of .X project directory)"
   })
-  .implies("s", "p")
   .option("e", {
     alias: "ecu_id",
-    describe: "name of the ECU from the scenario file being programmed"
+    describe: "Specific ECU being programmed (e.g. ECU3)"
   })
-  .implies("s", "e")
+  .option("d", {
+    alias: "project_dir",
+    describe: "Directory for existing MPLABX project",
+    default: "."
+  })
   .option("h", {
     alias: "custom_hex",
-    describe: "use with \"all\" command if hex file is not in <project_dir>/dist/default/production"
+    describe: "Location of .hex file to use or build to",
   })
-  .demandCommand(1).argv;
+  .implies("s", "p") // if scenario file is given, that implies a program file must also be given
+  .implies("s", "e") // if a scenario file is given, that implies an ECU ID must also be given
+  .demandCommand(1, "You must provide at least one command from [\"all\", \"make\", \"flash\"] to proceed.")
+  .help()
+  .argv;
 
-// Verify that a valid command is used.
-if (argv._[0] !== "make" && argv._[0] !== "flash" && argv._[0] !== "all") {
-  console.log(argv._[0] + " is not a valid command, try \"make\", \"flash\", or \"all\".");
-  process.exit(1);
-}
 
 // Function that returns the new data for the written file. Separated to allow changes to be made easily.
 function getDataToWrite(program_file, bytes)
@@ -78,18 +87,66 @@ function getDataToWrite(program_file, bytes)
   return program_file.replace("// 0000 INSERT MESSAGE 0000 //\r\n", bytes);
 }
 
+function choose_hex_file()
+{
+  if(argv.custom_hex) // use custom .hex file path
+  {
+    hex_file_chosen = argv.custom_hex;
+  }
+  else // use default .hex file path from project directory structure
+  {
+    let output_dir = path.join(argv.project_dir, "dist/default/production");
+    let hex_file_name = fs.readdirSync(output_dir).find(e => path.extname(e) === ".hex");
+    hex_file_chosen = path.join(output_dir, hex_file_name);
+  }
 
-// Need this to tell if "all" is called in the "flash" function.
-var hex_file;
+  return hex_file_chosen
+}
+
+const all_params = argv.device_type && argv.project_dir && argv.ecu_id && argv.scenario_file && argv.program_file && argv.custom_hex;
+var hex_file_chosen = choose_hex_file() // choosing between default or custom .hex file path
+
+// Divide specific commands and cases; Yargs will handle the default cases when insufficient parameters are provided.
+if(argv._[0] === "make")
+{
+  if(all_params)
+  {
+    // inject scenario into .c file and "make" .hex to default and custom location
+  }
+  else if(argv.device_type && argv.project_dir && argv.ecu_id && argv.scenario_file && argv.program_file) // all but <custom_hex>
+  {
+    // inject scenario into .c file and "make" .hex to default location
+  }
+  else if(argv.device_type && argv.project_dir) // minimal parameter requirements for make
+  {
+    // "make" .hex to default location without scenario
+  }
+}
+else if(argv._[0] === "flash")
+{
+
+}
+if(argv._[0] === "all")
+{
+  // 1
+  // 2
+  // 3
+  // 4
+}
+else
+{
+  console.log(argv._[0] + " is not a valid command, use \"make\", \"flash\", or \"all\".");
+  process.exit(1);
+}
 
 
-// COMMAND: "make". Builds an MPLab project. Also runs this if "all" is the command.
+// COMMAND: "make". Builds an MPLABX project. Also runs this if "all" is the command.
 if (argv._[0] === "make" || argv._[0] === "all")
 {
   // Verify that make is available.
   if (!shell.which("make"))
   {
-    console.log("make is not available.");
+    console.log("The \"make\" executable is not available; ensure an appropriate version is set in your PATH.");
   }
   else
   {
@@ -97,7 +154,7 @@ if (argv._[0] === "make" || argv._[0] === "all")
     var program_file, program_path;
 
     // Do this if there is a scenario file to be included.
-    if (argv.scenario_file)
+    if(argv.scenario_file)
     {
       // Read in scenario file.
       let data = fs.readFileSync(argv.scenario_file, { encoding: "utf8" });
@@ -110,29 +167,29 @@ if (argv._[0] === "make" || argv._[0] === "all")
       data.split("\r\n").forEach(function (e) {
         let values = e.split(" ");
         let idx = values[0]; // row index
-        let ecu_id = values[1]; // ECU<n>
+        let ecu_num = values[1]; // ECU<n>
         let send_mode = values[2]; // Tx or Rx
-        if (!messages.hasOwnProperty(ecu_id))
+        if (!messages.hasOwnProperty(ecu_num))
         {
-          messages[ecu_id] = {
+          messages[ecu_num] = {
             Tx: [],
             Rx: [],
             total: 0
           };
         }
-        messages[ecu_id][send_mode].push({
+        messages[ecu_num][send_mode].push({
           sequence_number: values[0],
           message_id: values[3], // the arbitration ID
           data: values.slice(4) // 8 bytes of hexidecimal formatted CAN payload
         });
-        messages[ecu_id].total++;
+        messages[ecu_num].total++;
       });
 
-      let ecu_id = argv.ecu_id; // go through the ECU's messages and create its edited program (.c) file
-      var bytes = "struct Message messages[" + messages[ecu_id].total + "] = {\r\n"; // information to be written to file
+      let ecu_num = argv.ecu_id; // go through the ECU's messages and create its edited program (.c) file
+      var bytes = "struct Message messages[" + messages[ecu_num].total + "] = {\r\n"; // information to be written to file
 
       // Format the transmit data to be used in the C file.
-      messages[ecu_id].Tx.forEach(m => {
+      messages[ecu_num].Tx.forEach(m => {
         // Convert the eight data (string) values into four C-compliant hexadecimal values.
         // The final format of this string is `{0xXXXX, 0xXXXX, 0xXXXX, 0xXXXX}`.
         let data = "{0x" + m.data.map((e, j, a) => {
@@ -141,13 +198,13 @@ if (argv._[0] === "make" || argv._[0] === "all")
         }).filter(e => e).join(", 0x") + "}";
 
         // The comes out to something like `{1, "ECU1", "Tx", 101, {0xXXXX, 0xXXXX, 0xXXXX, 0xXXXX}}`.
-        bytes += "{" + m.sequence_number + ', "' + ecu_id + '", "Tx", ' + m.message_id + ", " + data + "},\r\n";
+        bytes += "{" + m.sequence_number + ', "' + ecu_num + '", "Tx", ' + m.message_id + ", " + data + "},\r\n";
       });
 
       // Format the receive data to be used in the C file.
-      messages[ecu_id].Rx.forEach(m => {
+      messages[ecu_num].Rx.forEach(m => {
         // The comes out to something like `{0, "ECU1", "Rx", 101, {}}`.
-        bytes += '{0, "' + ecu_id + '", "Rx", ' + m.message_id + ", {}},\r\n";
+        bytes += '{0, "' + ecu_num + '", "Rx", ' + m.message_id + ", {}},\r\n";
       });
       
       bytes = bytes.slice(0, -1) + "};\r\n"; // finish off the data
@@ -155,24 +212,17 @@ if (argv._[0] === "make" || argv._[0] === "all")
       program_file = fs.readFileSync(program_path, { encoding: "utf8" }); // open the program file specified by the user
 
       // Write the data to the program file.
-      let full_data = getDataToWrite(program_file, bytes);
-      fs.writeFileSync(program_path, full_data);
+      let full_data = getDataToWrite(program_file, bytes); // original .c file with scenario data
+      fs.writeFileSync(program_path, full_data); // overwrites/inserts scenario data
 
       shell.cd(argv.project_dir); // go to the project directory
-      shell.exec("make"); // execute "make" in the project directory to compile the hex file
+      shell.exec("make"); // execute "make" in the project directory to compile the .hex file
       fs.writeFileSync(program_path, program_file); // revert file changes
-
-      // Update this in case this is the "all" command.
-      if(argv.custom_hex)
-      {
-        hex_file = argv.hex_file;
-      }
-      else
-      {
-        let output_dir = path.join(argv.project_dir, "dist/default/production");
-        let hex_file_name = fs.readdirSync(output_dir).find(e => path.extname(e) === ".hex");
-        hex_file = path.join(output_dir, hex_file_name);
-      }
+    }
+    else if(!scenario_file)
+    {
+      shell.cd(argv.project_dir); // go to the project directory
+      shell.exec("make"); // execute "make" in the project directory to compile the .hex file
     }
   }
 }
@@ -180,11 +230,11 @@ if (argv._[0] === "make" || argv._[0] === "all")
 // COMMAND: "flash". Flash a hex file onto an ECU. Also runs this if "all" is the command.
 if (argv._[0] === "flash" || argv._[0] === "all") {
   // Verify that ipecmd is available.
-  // "/Applications/microchip/mplabx/v5.20/mplab_platform/mplab_ipe/ipecmd.jar" on macOS
-  // "C:\Program Files (x86)\Microchip\MPLABX\v5.20\mplab_platform\mplab_ipe\ipecmd.jar" on Windows
+  // "/Applications/microchip/MPLABXx/v5.20/MPLABX_platform/MPLABX_ipe/ipecmd.jar" on macOS
+  // "C:\Program Files (x86)\Microchip\MPLABXX\v5.20\MPLABX_platform\MPLABX_ipe\ipecmd.jar" on Windows
   if (!shell.which("ipecmd"))
   {
-    console.log("Cannot run this task, ipecmd not available.");
+    console.log("The \"ipecmd\" executable is not available; ensure an appropriate version is set in your PATH.");
   }
   else
   {
@@ -197,20 +247,20 @@ if (argv._[0] === "flash" || argv._[0] === "all") {
     // Prepare ipecmd.
     let cmd = "ipecmd -TPPKOB -M -OL";
     cmd += " -P" + part_name; // specify the <part_name> option given by the user
-    cmd += " -F" + (hex_file || argv.hex_file); // specify <hex_file> option given by the user from directory structure
+    cmd += " -F" + (hex_file_chosen || argv.custom_hex);
     cmd += " -TS"+ "BUR171520074" // specify the <sn> given by the user to uniquely identify the MCU
 
-    if(argv.device_type == undefined || argv.hex_file == undefined || argv.ecu_id == undefined)
+    if(!argv.device_type || !argv.custom_hex || !argv.ecu_id)
     {
       console.log("\nERROR::160::BAD_ARGUMENTS")
       console.log("You must specify a device type, a hex file, and an ECU ID like:")
-      console.log("\"node boardcmd.js flash <device_type> <hex_file_path> -e ECU<n>\" (where: 0 ≤ n < 7) to flash a board.")
+      console.log("\"node boardcmd.js flash <device_type> <hex_file_path> <ECUn>\" (where: 0 ≤ n < 7) to flash a board.")
       process.exit();
     }
 
     shell.exec("python usbhub3p_ctrl.py " + argv.ecu_id) // isolate correct USB hub port
     console.log(cmd);
     shell.exec(cmd);
-    shell.exec("rm log.* && rm MPLABXLog.*") // remove all of the temporary log files
+    shell.exec("rm log.* && rm MPLABXXLog.*") // remove all of the temporary log files
   }
 }

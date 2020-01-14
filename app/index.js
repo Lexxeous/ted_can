@@ -10,13 +10,44 @@ function generateCommand(task) {
   let commandString = "node boardcmd.js ";
   commandString += task.command + " ";
 
-  if("device_type" in task) commandString += "\"" + task.device_type + "\" ";
-  
-  commandString += "\"" + task.project_dir + "\" ";
+  commandString += "\"" + task.device_type + "\" "; // every command must have <device_type> first
 
-  if("scenario_file" in task) commandString += "-s \"" + task.scenario_file + "\" ";
-  if("program_file" in task) commandString += "-p \"" + task.program_file + "\" ";
-  if("ecu_id" in task) commandString += "-e \"" + task.ecu_id + "\" ";
+  if(task.command === "make")
+  {
+    commandString += "\"" + task.project_dir + "\" "; // the "make" command must have <project_dir>
+    if("scenario_file" in task) commandString += "-s \"" + task.scenario_file + "\" ";
+    if("program_file" in task) commandString += "-p \"" + task.program_file + "\" ";
+    if("ecu_id" in task) commandString += "-e \"" + task.ecu_id + "\" ";
+    // if("hex_file" in task) commandString += "-h \"" + task.hex_file + "\" ";
+  }
+  else if(task.command === "flash")
+  {
+    commandString += "\"" + task.ecu_id + "\" "; // the "flash" command must have <ecu_id>
+    if("project_dir" in task) commandString += "-d \"" + task.project_dir + "\" ";
+    if("hex_file" in task) commandString += "-h \"" + task.hex_file + "\" ";
+  }
+  else if(task.command === "all")
+  {
+    commandString += "\"" + task.project_dir + "\" "; // the "all" command must have <project_dir>
+    commandString += "\"" + task.ecu_id + "\" "; // the "all" command must have <ecu_id>
+    if("scenario_file" in task) commandString += "-s \"" + task.scenario_file + "\" ";
+    if("program_file" in task) commandString += "-p \"" + task.program_file + "\" ";
+    if("hex_file" in task) commandString += "-h \"" + task.hex_file + "\" ";
+  }
+  else()
+  {
+    task.command + " is not a valid command, use \"make\", \"flash\", or \"all\".";
+    process.exit(1);
+  }
+
+  /*
+  1. if("device_type" in task) commandString += "\"" + task.device_type + "\" ";
+  2. if("scenario_file" in task) commandString += "-s \"" + task.scenario_file + "\" ";
+  3. if("program_file" in task) commandString += "-p \"" + task.program_file + "\" ";
+  4. if("ecu_id" in task) commandString += "-e \"" + task.ecu_id + "\" ";
+  5. if("project_dir" in task) commandString += "-d \"" + task.project_dir + "\" ";
+  6. if("hex_file" in task) commandString += "-h \"" + task.hex_file + "\" ";
+  */
 
   return commandString;
 }
@@ -112,6 +143,7 @@ function editTask(i) {
   document.getElementById("task-scenario_file-text").value = e.scenario_file || "";
   document.getElementById("task-device_type").value = e.device_type;
   document.getElementById("task-ecu_id").value = e.ecu_id || "";
+  // document.getElementById("task-custom_hex_file-text").value = e.custom_hex_file || "";
 
   // Hide all the file pickers.
   let taskFileTexts = document.getElementsByClassName("task-file-text");
