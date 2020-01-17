@@ -37,7 +37,7 @@ import usbhub3p_ctrl_utils as hub3p # for custom "usbhub3p_ctrl_utils" utility f
 
 usb_hub_sn = 0xA360110F
 ecu_arg = 1
-ecu_id = 3
+ecu_id = 3 # grabbing the 4th character of the <ECUn> argument string
 
 #---------------------------------------------- Print USB Control Command --------------------------------------------#
 

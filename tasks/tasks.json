@@ -2,18 +2,13 @@
     {
         "command": "flash",
         "device_type": "dsPIC33EV256GM106",
-        "ecu_id": "ECU1",
-        "program_file": "33EV_main_v11.c",
-        "project_dir": "C:\\Users\\Alex Gibson\\MPLABXProjects\\DM330018_Starter_Kit_Demo.X",
-        "scenario_file": "C:\\Users\\Alex Gibson\\Desktop\\ted_can\\data_standard.txt"
+        "ecu_id": "ECU3",
+        "project_dir": "C:\\Users\\AGibson\\MPLABXProjects\\33EV_ECU0.X"
     },
     {
-        "command": "flash",
+        "command": "make",
         "device_type": "dsPIC33EV256GM106",
-        "ecu_id": "ECU2",
-        "program_file": "C:\\Users\\AGibson\\MPLABXProjects\\33EV_ECU0.X\\33EV_ECU0.c",
-        "project_dir": "C:\\Users\\AGibson\\MPLABXProjects\\33EV_ECU0.X",
-        "scenario_file": "C:\\Users\\AGibson\\OneDrive - Gibson IT Solutions\\Career\\TNTech CAN\\ted_can\\scenarios\\scenario_main.txt"
+        "project_dir": "C:\\Users\\AGibson\\MPLABXProjects\\33EV_ECU0.X"
     },
     {
         "command": "all",
@@ -25,13 +20,11 @@
     },
     {
         "command": "all",
-        "device_type": "random",
-        "ecu_id": "ecu",
-        "project_dir": "C:\\Users\\Jordan\\Documents\\ShareX\\Screenshots"
-    },
-    {
-        "command": "all",
-        "device_type": "",
-        "project_dir": ""
+        "custom_hex_file": "<custom_hex_file>",
+        "device_type": "<device_type>",
+        "ecu_id": "<ecu_id>",
+        "program_file": "<program_file>",
+        "project_dir": "<project_dir>",
+        "scenario_file": "<scenario_file>"
     }
 ]
